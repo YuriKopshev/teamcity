@@ -1,6 +1,6 @@
 package _Self.buildTypes
 
-import jetbrains.buildServer.configs.kotlin.v2024_03.*  
+import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
@@ -8,10 +8,8 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 object Build : BuildType({
     name = "Build"
 
-    artifactRules = """
-        target/*.jar => artifacts/
-        target/plaindoll-0.0.2.jar => artifacts/
-    """.trimIndent()
+  
+    artifactRules = "target/*.jar => artifacts/"
     publishArtifacts = PublishMode.SUCCESSFUL
 
     vcs {
@@ -24,7 +22,8 @@ object Build : BuildType({
             conditions {
                 equals("teamcity.build.branch", "main")
             }
-            goals = "clean deploy"
+          
+            goals = "clean package"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
             userSettingsSelection = "settings.xml"
         }
